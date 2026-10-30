@@ -3,7 +3,20 @@ name: CI
 on:
   push:
     branches: [main]
+    # Docs-only changes cannot affect lint, tests or validation
+    paths-ignore:
+      - "*.md"
+      - ".github/**/*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "docs/**"
+      - "LICENSE"
   pull_request:
+    paths-ignore:
+      - "*.md"
+      - ".github/**/*.md"
+      - ".github/ISSUE_TEMPLATE/**"
+      - "docs/**"
+      - "LICENSE"
 
 permissions:
   contents: read
