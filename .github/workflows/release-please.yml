@@ -6,9 +6,8 @@ on:
       - main
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+# Least privilege: no default scopes; each job opts in to what it needs.
+permissions: {}
 
 # Serialised, never cancelled: a run may be halfway through writing the
 # release pull request or the release.
@@ -21,6 +20,10 @@ jobs:
     name: Release Please
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # release-please writes the release PR, tags and the GitHub release.
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       release-created: ${{ steps.release.outputs.release_created }}
       tag-name: ${{ steps.release.outputs.tag_name }}
@@ -41,8 +44,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
+          persist-credentials: false
           ref: ${{ needs.release-please.outputs.tag-name }}
 
       - name: Zip the eero integration
